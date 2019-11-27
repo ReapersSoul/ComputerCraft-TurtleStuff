@@ -138,22 +138,22 @@ function FaceDir(direction)
 			TurnRight()
 			return
 		end
-		if(dir=="-x")then
+		if(direction=="-x")then
 			TurnRight()
 			TurnRight()
 			return
 		end
 	end
 	if(dir=="-x")then
-		if(dir=="+y")then
+		if(direction=="+y")then
 			TurnRight()
 			return
 		end
-		if(dir=="-y")then
+		if(direction=="-y")then
 			TurnLeft()
 			return
 		end
-		if(dir=="+x")then
+		if(direction=="+x")then
 			TurnRight()
 			TurnRight()
 			return
@@ -186,7 +186,7 @@ function SelectItem(item)
         else
         print("no item in slot: ",s)
         end
-    end    
+    end
     print("could not find: ",item)
 	return false
 end
@@ -237,7 +237,7 @@ function InspectBack(item)
          if d.name == item then
 			 turtle.turnLeft()
 			 turtle.turnLeft()
-		 return true 
+		 return true
 		 end
      else
         print("failed inspect")
@@ -255,7 +255,7 @@ function InspectRight(item)
          print(d.name)
          if d.name == item then
 			 turtle.turnLeft()
-		 return true 
+		 return true
 		 end
      else
         print("failed inspect")
@@ -272,7 +272,7 @@ function InspectLeft(item)
          print(d.name)
          if d.name == item then
 			 turtle.turnRight()
-		 return true 
+		 return true
 		 end
      else
         print("failed inspect")
@@ -288,9 +288,9 @@ function InspectForward(item,direction)
      local suc, d = turtle.inspect()
      if suc then
          print(d.name)
-         if d.name == item then 
+         if d.name == item then
 		 FaceDir(tmpdir)
-		 return true 
+		 return true
 		 end
      else
         print("failed inspect")
