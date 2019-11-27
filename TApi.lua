@@ -480,6 +480,10 @@ end
 
 function RestorePosRot(index)
 	modem.transmit(3, 1,"Called: RestorePosRot")
+	modem.transmit(3, 1,SavedPosRots[index]["sx"])
+	modem.transmit(3, 1,SavedPosRots[index]["sy"])
+	modem.transmit(3, 1,SavedPosRots[index]["sz"])
+	modem.transmit(3, 1,SavedPosRots[index]["sdir"])
 	GoTo(SavedPosRots[index]["sx"],SavedPosRots[index]["sy"],SavedPosRots[index]["sz"])
 	FaceDir(DirToString[SavedPosRots[index]["sdir"]])
 end
