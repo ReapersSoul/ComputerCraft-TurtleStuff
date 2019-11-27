@@ -33,9 +33,9 @@ width = args[1]
 
 hight = args[2]
 
-while true do
+--while true do
 	for i=1,width do
-		for j=1,hight do
+		for j=1,hight-1 do
 			if turtle.getFuelLevel()==0 then
 				if TApi.SelectItem("minecraft:coal") then
 					turtle.refuel(1)
@@ -49,9 +49,15 @@ while true do
 			if(TApi.InventoryFull())then
 				Deposit()
 			end
-			modem.transmit(3, 1,"going up")
+			turtle.digUp()
+			if j~=hight-1 then
+				modem.transmit(3, 1,"going up")
+				TApi.Up()
+			end
 		end
-		modem.transmit(3, 1,"going right"
+		modem.transmit(3, 1,"homing z")
+		TApi.HomeZ()
+		modem.transmit(3, 1,"going right")
 	end
-	modem.transmit(3, 1,"homing and starting again"
-end
+	modem.transmit(3, 1,"homing and starting again")
+--end
