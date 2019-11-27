@@ -34,7 +34,7 @@ width = args[1]
 hight = args[2]
 
 --while true do
-TApi.SavedPosRot(1)
+TApi.SavePosRot(1)
 	for i=1,width do
 		for j=1,hight-1 do
 			if turtle.getFuelLevel()==0 then
