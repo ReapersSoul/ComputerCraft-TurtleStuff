@@ -1,2 +1,2 @@
 os.loadAPI("TApi.lua")
-TApi.TurnRight()
+TApi.FaceDir("-y")

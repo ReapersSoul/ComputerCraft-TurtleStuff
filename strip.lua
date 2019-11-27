@@ -32,7 +32,6 @@ width = args[1]
 hight = args[2]
 
 while true do
-	TApi.SavePosRot()
 	while TApi.GetX()~=width-2 do
 		while TApi.GetZ()~=hight-1 do
 			if(turtle.getFuelLevel()==0)then
@@ -52,15 +51,15 @@ while true do
 				Deposit()
 				TApi.RestorePosRot()
 			end
-		
+
 			print(TApi.GetZ(),"<-Z hight->",hight)
 			turtle.digUp()
 			TApi.Up()
 		end
 		TApi.HomeZ()
 		print ("digdir: ",TApi.DigDir("+x"))
-		print("movedir: ",TApi.MoveDir("+x"))
+		TApi.MoveDir("+x")
 	end
-	TApi.RestorePosRot()
+	TApi.HomeX()
 	TApi.Forward()
 end

@@ -33,7 +33,7 @@ function Forward()
 	if(dir=="-x")then
 		x= x-1
 	end
-	turtle.forward()
+	print("Forward: ",turtle.forward())
 end
 
 function Back()
@@ -162,9 +162,9 @@ function FaceDir(direction)
 end
 
 function MoveDir(direction)
-	print("dir before:",dir)
+	print("MoveDir: dir before:",dir)
 	FaceDir(direction)
-	print("dir after:",dir)
+	print("MoveDir: dir after:",dir)
 	Forward()
 end
 
