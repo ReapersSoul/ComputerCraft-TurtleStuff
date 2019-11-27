@@ -1,3 +1,9 @@
+modem = peripheral.wrap("left")
+
+function GetModem()
+	return modem
+end
+
 local x,y,z,dir=0,0,0,0
 
 local sx,sy,sz,sdir=0,0,0,0
@@ -17,27 +23,27 @@ DirToString[2] = "-y"
 DirToString[3] = "-x"
 
 function GetX()
-	print("Called: GetX")
+	modem.transmit(3, 1,"Called: GetX")
 	return x
 end
 
 function GetY()
-	print("Called: GetY")
+	modem.transmit(3, 1,"Called: GetY")
 	return y
 end
 
 function GetZ()
-	print("Called: GetZ")
+	modem.transmit(3, 1,"Called: GetZ")
 	return z
 end
 
 function GetDir()
-	print("Called: GetDir")
+	modem.transmit(3, 1,"Called: GetDir")
 	return DirToString[dir]
 end
 
 function Forward()
-	print("Called: Forward")
+	modem.transmit(3, 1,"Called: Forward")
 	if(dir==0)then
 		y= y+1
 	end
@@ -50,11 +56,11 @@ function Forward()
 	if(dir==3)then
 		x= x-1
 	end
-	print("Forward: ",turtle.forward())
+	modem.transmit(3, 1,"Forward: ",turtle.forward())
 end
 
 function Back()
-	print("Called: Back")
+	modem.transmit(3, 1,"Called: Back")
 	if(dir==0)then
 		y= y-1
 	end
@@ -71,133 +77,171 @@ function Back()
 end
 
 function Up()
-	print("Called: Up")
-	print(turtle.up())
+	modem.transmit(3, 1,"Called: Up")
+	modem.transmit(3, 1,turtle.up())
 	z=z+1
 end
 
 function Down()
-	print("Called: Down")
+	modem.transmit(3, 1,"Called: Down")
 	z=z-1
 	turtle.down()
 end
 
 function TurnRight()
-	print("Called: TurnRight")
-	if(dir==3){
+	modem.transmit(3, 1,"Called: TurnRight")
+	if(dir==3) then
 		dir=0
 	else
-		dir+1
-	}
+		dir=dir+1
+	end
 	turtle.turnRight()
 end
 
 function TurnLeft()
-	print("Called: TurnLeft")
-	if(dir==0){
+	modem.transmit(3, 1,"Called: TurnLeft")
+	if(dir==0) then
 		dir=3
 	else
-		dir-1
-	}
+		dir=dir-1
+	end
 	turtle.turnLeft()
 end
 
 function FaceDir(direction)
-	print("Called: FaceDir")
+	modem.transmit(3, 1,"Called: FaceDir")
 	if(StringToDir[direction]==dir)then
 		return
 	end
-	if(StringToDir[direction]==0) then
-		
+	if(StringToDir[direction]==0 and dir == 1) then
+		TurnLeft()
 	end
+	if(StringToDir[direction]==0 and dir == 2) then
+		TurnLeft()
+		TurnLeft()
+	end
+	if(StringToDir[direction]==0 and dir == 3) then
+		TurnRight()
+	end
+	if(StringToDir[direction]==1 and dir == 2) then
+		TurnLeft()
+	end
+	if(StringToDir[direction]==1 and dir == 3) then
+		TurnLeft()
+		TurnLeft()
+	end
+	if(StringToDir[direction]==1 and dir == 0) then
+		TurnRight()
+	end
+	if(StringToDir[direction]==2 and dir == 3) then
+		TurnLeft()
+	end
+	if(StringToDir[direction]==2 and dir == 0) then
+		TurnLeft()
+		TurnLeft()
+	end
+	if(StringToDir[direction]==2 and dir == 1) then
+		TurnRight()
+	end
+	if(StringToDir[direction]==3 and dir == 0) then
+		TurnLeft()
+	end
+	if(StringToDir[direction]==3 and dir == 1) then
+		TurnLeft()
+		TurnLeft()
+	end
+	if(StringToDir[direction]==3 and dir == 2) then
+		TurnRight()
+	end
+
 
 
 
 end
 
 function MoveDir(direction)
-	print("Called: MoveDir")
-	print("MoveDir: dir before:",dir)
+	modem.transmit(3, 1,"Called: MoveDir")
+	modem.transmit(3, 1,"MoveDir: dir before:",DirToString[dir])
 	FaceDir(direction)
-	print("MoveDir: dir after:",dir)
+	modem.transmit(3, 1,"MoveDir: dir after:",DirToString[dir])
 	Forward()
 end
 
 function DigDir(direction)
-	print("Called: DigDir")
+	modem.transmit(3, 1,"Called: DigDir")
 	FaceDir(direction)
 	turtle.dig()
 	return "tried to dig"
 end
 
 function SelectItem(item)
-	print("Called: SelectItem")
+	modem.transmit(3, 1,"Called: SelectItem")
     for s=1,16 do
         turtle.select(s)
         data =turtle.getItemDetail()
         if data~=nil then
         if data.name == item then
-            print("found: ",item)
+            modem.transmit(3, 1,"found: ",item)
             return true
         end
         else
-        print("no item in slot: ",s)
+        modem.transmit(3, 1,"no item in slot: ",s)
         end
     end
-    print("could not find: ",item)
+    modem.transmit(3, 1,"could not find: ",item)
 	return false
 end
 
 function InspectDown(item)
-	print("Called: InspectDown")
+	modem.transmit(3, 1,"Called: InspectDown")
      local suc, d = turtle.inspectDown()
      if suc then
-         print(d.name)
+         modem.transmit(3, 1,d.name)
          if d.name == item then return true end
      else
-        print("failed inspect")
+        modem.transmit(3, 1,"failed inspect")
      end
      return false
 end
 
 function InspectUp(item)
-	print("Called: InspectUp")
+	modem.transmit(3, 1,"Called: InspectUp")
      local suc, d = turtle.inspectUp()
      if suc then
-         print(d.name)
+         modem.transmit(3, 1,d.name)
          if d.name == item then return true end
      else
-        print("failed inspect")
+        modem.transmit(3, 1,"failed inspect")
      end
      return false
 end
 
 function InspectForward(item)
-	print("Called: InspectForward")
+	modem.transmit(3, 1,"Called: InspectForward")
      local suc, d = turtle.inspect()
      if suc then
-         print(d.name)
+         modem.transmit(3, 1,d.name)
          if d.name == item then return true end
      else
-        print("failed inspect")
+        modem.transmit(3, 1,"failed inspect")
      end
      return false
 end
 
 function InspectBack(item)
-	print("Called: InspectBack")
+	modem.transmit(3, 1,"Called: InspectBack")
 	turtle.turnRight()
 	turtle.turnRight()
      local suc, d = turtle.inspect()
      if suc then
-         print(d.name)
+         modem.transmit(3, 1,d.name)
          if d.name == item then
 			 turtle.turnLeft()
 			 turtle.turnLeft()
 		 return true
 		 end
      else
-        print("failed inspect")
+        modem.transmit(3, 1,"failed inspect")
      end
 	 turtle.turnLeft()
 	 turtle.turnLeft()
@@ -205,74 +249,74 @@ function InspectBack(item)
 end
 
 function InspectRight(item)
-	print("Called: InspectRight")
+	modem.transmit(3, 1,"Called: InspectRight")
 	turtle.turnRight()
      local suc, d = turtle.inspect()
      if suc then
-         print(d.name)
+         modem.transmit(3, 1,d.name)
          if d.name == item then
 			 turtle.turnLeft()
 		 return true
 		 end
      else
-        print("failed inspect")
+        modem.transmit(3, 1,"failed inspect")
      end
 	 turtle.turnLeft()
      return false
 end
 
 function InspectLeft(item)
-	print("Called: InspectLeft")
+	modem.transmit(3, 1,"Called: InspectLeft")
 	turtle.turnLeft()
      local suc, d = turtle.inspect()
      if suc then
-         print(d.name)
+         modem.transmit(3, 1,d.name)
          if d.name == item then
 			 turtle.turnRight()
 		 return true
 		 end
      else
-        print("failed inspect")
+        modem.transmit(3, 1,"failed inspect")
      end
 	 turtle.turnRight()
      return false
 end
 
 function InspectDir(item,direction)
-	print("Called: InspectDir")
-	tmpdir=dir
+	modem.transmit(3, 1,"Called: InspectDir")
+	tmpdir=DirToString[dir]
 	FaceDir(direction)
      local suc, d = turtle.inspect()
      if suc then
-         print(d.name)
+         modem.transmit(3, 1,d.name)
          if d.name == item then
 		 FaceDir(tmpdir)
 		 return true
 		 end
      else
-        print("failed inspect")
+        modem.transmit(3, 1,"failed inspect")
      end
 	 FaceDir(tmpdir)
      return false
 end
 
 function DetectDown()
-	print("Called: DetectDown")
+	modem.transmit(3, 1,"Called: DetectDown")
 	return turtle.detectDown()
 end
 
 function DetectUp()
-	print("Called: DetectUp")
+	modem.transmit(3, 1,"Called: DetectUp")
 	return turtle.detectUp()
 end
 
 function DetectForward()
-	print("Called: DetectForward")
+	modem.transmit(3, 1,"Called: DetectForward")
 	return turtle.detect()
 end
 
 function DetectBack()
-	print("Called: DetectBack")
+	modem.transmit(3, 1,"Called: DetectBack")
 	turtle.turnRight()
 	turtle.turnRight()
 	ret = turtle.detect()
@@ -282,7 +326,7 @@ function DetectBack()
 end
 
 function DetectRight()
-	print("Called: DetectRight")
+	modem.transmit(3, 1,"Called: DetectRight")
 	turtle.turnRight()
 	ret = turtle.detect()
 	turtle.turnLeft()
@@ -290,7 +334,7 @@ function DetectRight()
 end
 
 function DetectLeft()
-	print("Called: DetectLeft")
+	modem.transmit(3, 1,"Called: DetectLeft")
 	turtle.turnLeft()
 	ret = turtle.detect()
 	turtle.turnRight()
@@ -298,8 +342,8 @@ function DetectLeft()
 end
 
 function DetectDir(direction)
-	print("Called: DetectDir")
-	tmpdir =dir
+	modem.transmit(3, 1,"Called: DetectDir")
+	tmpdir =DirToString[dir]
 	FaceDir(direction)
 	tmpdet= turtle.detect()
 	FaceDir(tmpdir)
@@ -307,7 +351,7 @@ function DetectDir(direction)
 end
 
 function HomeX()
-	print("Called: HomeX")
+	modem.transmit(3, 1,"Called: HomeX")
 	if x>0 then
 		if(not DetectDir("-x")) then
 			while x ~= 0 do
@@ -323,7 +367,7 @@ function HomeX()
 	end
 end
 function HomeY()
-	print("Called: HomeY")
+	modem.transmit(3, 1,"Called: HomeY")
 	if y>0 then
 		if(not DetectDir("-y")) then
 			while y ~= 0 do
@@ -339,7 +383,7 @@ function HomeY()
 	end
 end
 function HomeZ()
-	print("Called: HomeZ")
+	modem.transmit(3, 1,"Called: HomeZ")
 	if z>0 then
 		if(not DetectDown()) then
 			while z ~= 0 do
@@ -356,7 +400,7 @@ function HomeZ()
 end
 
 function HomeAll()
-	print("Called: HomeAll")
+	modem.transmit(3, 1,"Called: HomeAll")
 	while x~=0 and y~=0 and z~=0 do
 		HomeX()
 		HomeY()
@@ -366,7 +410,7 @@ function HomeAll()
 end
 
 function GoX(dx)
-	print("Called: GoX")
+	modem.transmit(3, 1,"Called: GoX")
 	if x>dx then
 		if(not DetectDir("-x")) then
 			while x ~= dx do
@@ -383,7 +427,7 @@ function GoX(dx)
 end
 
 function GoY(dy)
-	print("Called: GoY")
+	modem.transmit(3, 1,"Called: GoY")
 	if y>dy then
 		if(not DetectDir("-y")) then
 			while y ~= dy do
@@ -400,7 +444,7 @@ function GoY(dy)
 end
 
 function GoZ(dz)
-	print("Called: GoZ")
+	modem.transmit(3, 1,"Called: GoZ")
 	if z>dz then
 		if(not DetectDown()) then
 			while z ~= dz do
@@ -417,7 +461,7 @@ function GoZ(dz)
 end
 
 function GoTo(dx,dy,dz)
-	print("Called: GoTO")
+	modem.transmit(3, 1,"Called: GoTO")
 		while x~=0 and y~=0 and z~=0 do
 		GoX()
 		GoY()
@@ -426,18 +470,18 @@ function GoTo(dx,dy,dz)
 end
 
 function SavePosRot()
-	print("Called: SavePosRot")
+	modem.transmit(3, 1,"Called: SavePosRot")
 	sx,sy,sz,sdir=x,y,z,dir
 end
 
 function RestorePosRot()
-	print("Called: RestorePosRot")
+	modem.transmit(3, 1,"Called: RestorePosRot")
 	GoTo(sx,sy,sz)
-	FaceDir(sdir)
+	FaceDir(DirToString[sdir])
 end
 
 function InventoryFull()
-	print("Called: InventoryFull")
+	modem.transmit(3, 1,"Called: InventoryFull")
 	local NES=0
 	for s=1,16 do
 		turtle.select(s)
