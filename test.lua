@@ -1,2 +1,7 @@
 os.loadAPI("TApi.lua")
-TApi.FaceDir("-y")
+
+print(TApi.GetDir())
+
+TApi.FaceDir("+x")
+
+print(TApi.GetDir())

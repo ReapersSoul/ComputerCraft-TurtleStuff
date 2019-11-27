@@ -1,167 +1,122 @@
-local x,y,z=0,0,0
+local x,y,z,dir=0,0,0,0
 
-local sx,sy,sz,sdir=0,0,0,"+y"
+local sx,sy,sz,sdir=0,0,0,0
 
-local dir ="+y"
+StringToDir = {}
+
+StringToDir["+y"] = 0
+StringToDir["+x"] = 1
+StringToDir["-y"] = 2
+StringToDir["-x"] = 3
+
+DirToString = {}
+
+DirToString[0] = "+y"
+DirToString[1] = "+x"
+DirToString[2] = "-y"
+DirToString[3] = "-x"
 
 function GetX()
+	print("Called: GetX")
 	return x
 end
 
 function GetY()
+	print("Called: GetY")
 	return y
 end
 
 function GetZ()
+	print("Called: GetZ")
 	return z
 end
 
 function GetDir()
-	return Dir
+	print("Called: GetDir")
+	return DirToString[dir]
 end
 
 function Forward()
-	if(dir=="+y")then
+	print("Called: Forward")
+	if(dir==0)then
 		y= y+1
 	end
-	if(dir=="-y")then
-		y= y-1
-	end
-	if(dir=="+x")then
+	if(dir==1)then
 		x= x+1
 	end
-	if(dir=="-x")then
+	if(dir==2)then
+		y= y-1
+	end
+	if(dir==3)then
 		x= x-1
 	end
 	print("Forward: ",turtle.forward())
 end
 
 function Back()
-	if(dir=="+y")then
+	print("Called: Back")
+	if(dir==0)then
 		y= y-1
 	end
-	if(dir=="-y")then
-		y= y+1
-	end
-	if(dir=="+x")then
+	if(dir==1)then
 		x= x-1
 	end
-	if(dir=="-x")then
+	if(dir==2)then
+		y= y+1
+	end
+	if(dir==3)then
 		x= x+1
 	end
 	turtle.back()
 end
 
 function Up()
-	print("before: ",z)
+	print("Called: Up")
 	print(turtle.up())
 	z=z+1
-	print("after: ",z)
 end
+
 function Down()
+	print("Called: Down")
 	z=z-1
 	turtle.down()
 end
 
 function TurnRight()
-	if(dir=="+y")then
-		dir="+x"
-	end
-	if(dir=="-y")then
-		dir="-x"
-	end
-	if(dir=="+x")then
-		dir="-y"
-	end
-	if(dir=="-x")then
-		dir="+y"
-	end
+	print("Called: TurnRight")
+	if(dir==3){
+		dir=0
+	else
+		dir+1
+	}
 	turtle.turnRight()
 end
 
 function TurnLeft()
-	if(dir=="+y")then
-		dir="-x"
-	end
-	if(dir=="-y")then
-		dir="+x"
-	end
-	if(dir=="+x")then
-		dir="+y"
-	end
-	if(dir=="-x")then
-		dir="-y"
-	end
+	print("Called: TurnLeft")
+	if(dir==0){
+		dir=3
+	else
+		dir-1
+	}
 	turtle.turnLeft()
 end
 
 function FaceDir(direction)
-	if(direction==dir)then
+	print("Called: FaceDir")
+	if(StringToDir[direction]==dir)then
 		return
 	end
-	if(dir=="+y")then
-		if(direction=="-y")then
-			TurnRight()
-			TurnRight()
-			return
-		end
-		if(direction=="+x")then
-			TurnRight()
-			return
-		end
-		if(direction=="-x")then
-			TurnLeft()
-			return
-		end
+	if(StringToDir[direction]==0) then
+		
 	end
-	if(dir=="-y")then
-		if(direction=="+y")then
-			TurnRight()
-			TurnRight()
-			return
-		end
-		if(direction=="+x")then
-			TurnLeft()
-			return
-		end
-		if(direction=="-x")then
-			TurnRight()
-			return
-		end
-	end
-	if(dir=="+x")then
-		if(direction=="+y")then
-			TurnRight()
-			return
-		end
-		if(direction=="-y")then
-			TurnRight()
-			return
-		end
-		if(direction=="-x")then
-			TurnRight()
-			TurnRight()
-			return
-		end
-	end
-	if(dir=="-x")then
-		if(direction=="+y")then
-			TurnRight()
-			return
-		end
-		if(direction=="-y")then
-			TurnLeft()
-			return
-		end
-		if(direction=="+x")then
-			TurnRight()
-			TurnRight()
-			return
-		end
-	end
+
+
+
 end
 
 function MoveDir(direction)
+	print("Called: MoveDir")
 	print("MoveDir: dir before:",dir)
 	FaceDir(direction)
 	print("MoveDir: dir after:",dir)
@@ -169,12 +124,14 @@ function MoveDir(direction)
 end
 
 function DigDir(direction)
+	print("Called: DigDir")
 	FaceDir(direction)
 	turtle.dig()
 	return "tried to dig"
 end
 
 function SelectItem(item)
+	print("Called: SelectItem")
     for s=1,16 do
         turtle.select(s)
         data =turtle.getItemDetail()
@@ -192,7 +149,7 @@ function SelectItem(item)
 end
 
 function InspectDown(item)
-    print("called inspect")
+	print("Called: InspectDown")
      local suc, d = turtle.inspectDown()
      if suc then
          print(d.name)
@@ -204,7 +161,7 @@ function InspectDown(item)
 end
 
 function InspectUp(item)
-    print("called inspect")
+	print("Called: InspectUp")
      local suc, d = turtle.inspectUp()
      if suc then
          print(d.name)
@@ -216,7 +173,7 @@ function InspectUp(item)
 end
 
 function InspectForward(item)
-    print("called inspect")
+	print("Called: InspectForward")
      local suc, d = turtle.inspect()
      if suc then
          print(d.name)
@@ -228,7 +185,7 @@ function InspectForward(item)
 end
 
 function InspectBack(item)
-    print("called inspect")
+	print("Called: InspectBack")
 	turtle.turnRight()
 	turtle.turnRight()
      local suc, d = turtle.inspect()
@@ -248,7 +205,7 @@ function InspectBack(item)
 end
 
 function InspectRight(item)
-    print("called inspect")
+	print("Called: InspectRight")
 	turtle.turnRight()
      local suc, d = turtle.inspect()
      if suc then
@@ -265,7 +222,7 @@ function InspectRight(item)
 end
 
 function InspectLeft(item)
-    print("called inspect")
+	print("Called: InspectLeft")
 	turtle.turnLeft()
      local suc, d = turtle.inspect()
      if suc then
@@ -281,8 +238,8 @@ function InspectLeft(item)
      return false
 end
 
-function InspectForward(item,direction)
-    print("called inspect")
+function InspectDir(item,direction)
+	print("Called: InspectDir")
 	tmpdir=dir
 	FaceDir(direction)
      local suc, d = turtle.inspect()
@@ -300,22 +257,22 @@ function InspectForward(item,direction)
 end
 
 function DetectDown()
-    print("called Detect")
+	print("Called: DetectDown")
 	return turtle.detectDown()
 end
 
 function DetectUp()
-    print("called Detect")
+	print("Called: DetectUp")
 	return turtle.detectUp()
 end
 
 function DetectForward()
-    print("called Detect")
+	print("Called: DetectForward")
 	return turtle.detect()
 end
 
 function DetectBack()
-    print("called Detect")
+	print("Called: DetectBack")
 	turtle.turnRight()
 	turtle.turnRight()
 	ret = turtle.detect()
@@ -325,7 +282,7 @@ function DetectBack()
 end
 
 function DetectRight()
-    print("called Detect")
+	print("Called: DetectRight")
 	turtle.turnRight()
 	ret = turtle.detect()
 	turtle.turnLeft()
@@ -333,7 +290,7 @@ function DetectRight()
 end
 
 function DetectLeft()
-    print("called Detect")
+	print("Called: DetectLeft")
 	turtle.turnLeft()
 	ret = turtle.detect()
 	turtle.turnRight()
@@ -341,7 +298,7 @@ function DetectLeft()
 end
 
 function DetectDir(direction)
-    print("called Detect")
+	print("Called: DetectDir")
 	tmpdir =dir
 	FaceDir(direction)
 	tmpdet= turtle.detect()
@@ -350,6 +307,7 @@ function DetectDir(direction)
 end
 
 function HomeX()
+	print("Called: HomeX")
 	if x>0 then
 		if(not DetectDir("-x")) then
 			while x ~= 0 do
@@ -365,6 +323,7 @@ function HomeX()
 	end
 end
 function HomeY()
+	print("Called: HomeY")
 	if y>0 then
 		if(not DetectDir("-y")) then
 			while y ~= 0 do
@@ -380,6 +339,7 @@ function HomeY()
 	end
 end
 function HomeZ()
+	print("Called: HomeZ")
 	if z>0 then
 		if(not DetectDown()) then
 			while z ~= 0 do
@@ -396,6 +356,7 @@ function HomeZ()
 end
 
 function HomeAll()
+	print("Called: HomeAll")
 	while x~=0 and y~=0 and z~=0 do
 		HomeX()
 		HomeY()
@@ -405,6 +366,7 @@ function HomeAll()
 end
 
 function GoX(dx)
+	print("Called: GoX")
 	if x>dx then
 		if(not DetectDir("-x")) then
 			while x ~= dx do
@@ -421,6 +383,7 @@ function GoX(dx)
 end
 
 function GoY(dy)
+	print("Called: GoY")
 	if y>dy then
 		if(not DetectDir("-y")) then
 			while y ~= dy do
@@ -437,6 +400,7 @@ function GoY(dy)
 end
 
 function GoZ(dz)
+	print("Called: GoZ")
 	if z>dz then
 		if(not DetectDown()) then
 			while z ~= dz do
@@ -453,6 +417,7 @@ function GoZ(dz)
 end
 
 function GoTo(dx,dy,dz)
+	print("Called: GoTO")
 		while x~=0 and y~=0 and z~=0 do
 		GoX()
 		GoY()
@@ -461,15 +426,18 @@ function GoTo(dx,dy,dz)
 end
 
 function SavePosRot()
+	print("Called: SavePosRot")
 	sx,sy,sz,sdir=x,y,z,dir
 end
 
 function RestorePosRot()
+	print("Called: RestorePosRot")
 	GoTo(sx,sy,sz)
 	FaceDir(sdir)
 end
 
 function InventoryFull()
+	print("Called: InventoryFull")
 	local NES=0
 	for s=1,16 do
 		turtle.select(s)
