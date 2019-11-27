@@ -62,6 +62,6 @@ TApi.SavePosRot(1)
 		TApi.DigDir("+x")
 		TApi.MoveDir("+x")
 	end
-	TApi.RestorePosRot(1)
+	TApi.RestorePosRot(2)
 	modem.transmit(3, 1,"homing and starting again")
 --end
