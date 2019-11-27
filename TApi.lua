@@ -6,7 +6,7 @@ end
 
 local x,y,z,dir=0,0,0,0
 
-local sx,sy,sz,sdir=0,0,0,0
+local SavedPosRots={}
 
 StringToDir = {}
 
@@ -469,15 +469,19 @@ function GoTo(dx,dy,dz)
 	end
 end
 
-function SavePosRot()
+function SavePosRot(index)
 	modem.transmit(3, 1,"Called: SavePosRot")
-	sx,sy,sz,sdir=x,y,z,dir
+	SavedPosRots[index]={}
+	SavedPosRots[index]["sx"]=x
+	SavedPosRots[index]["sy"]=y
+	SavedPosRots[index]["sz"]=z
+	SavedPosRots[index]["sdir"]=dir
 end
 
-function RestorePosRot()
+function RestorePosRot(index)
 	modem.transmit(3, 1,"Called: RestorePosRot")
-	GoTo(sx,sy,sz)
-	FaceDir(DirToString[sdir])
+	GoTo(SavedPosRots[index]["sx"],SavedPosRots[index]["sy"],SavedPosRots[index]["sz"])
+	FaceDir(DirToString[SavedPosRots[index]["sdir"]])
 end
 
 function InventoryFull()
