@@ -58,6 +58,9 @@ hight = args[2]
 		modem.transmit(3, 1,"homing z")
 		TApi.HomeZ()
 		modem.transmit(3, 1,"going right")
+		TApi.DigDir("+x")
+		TApi.MoveDir("+x")
 	end
+	TApi.HomeX()
 	modem.transmit(3, 1,"homing and starting again")
 --end
